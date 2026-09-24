@@ -1,77 +1,92 @@
+<div align="center">
+
 # Text-to-Image SDXL
 
-![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)
-![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-F37626?logo=jupyter&logoColor=white)
-![Diffusers](https://img.shields.io/badge/Hugging%20Face-Diffusers-FFD21E?logo=huggingface&logoColor=black)
-![Model](https://img.shields.io/badge/Model-Stable%20Diffusion%20XL-6C5CE7)
+**A notebook-based Stable Diffusion XL inference project for generating images from natural-language prompts.**
 
-A notebook-based text-to-image generation project that demonstrates inference with **Stable Diffusion XL (SDXL)** through Hugging Face Diffusers.
+[![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-F37626?logo=jupyter&logoColor=white)](https://jupyter.org/)
+[![Diffusers](https://img.shields.io/badge/Hugging%20Face-Diffusers-FFD21E?logo=huggingface&logoColor=black)](https://github.com/huggingface/diffusers)
+[![Model](https://img.shields.io/badge/Model-Stable%20Diffusion%20XL-6C5CE7)](https://stability.ai/stable-diffusion)
 
-> **Project status:** Educational/experimental inference notebook. The repository preserves the original notebook workflow and does not claim to provide a production serving API or model training pipeline.
+[Explore the notebook](./text_to_image.ipynb) · [View the setup guide](#setup)
+
+</div>
+
+## Project status
+
+**Educational / experimental inference project.** This repository demonstrates SDXL image generation in a Jupyter Notebook. It is not presented as a production API, hosted application, model-training system, or benchmarked serving solution.
 
 ## Overview
 
-The project turns a natural-language prompt into an image using the SDXL text-to-image pipeline. Runtime configuration—including the prompt, negative prompt, inference steps, and guidance scale—is supplied in the notebook and can be tracked with Weights & Biases.
+This project converts a text prompt into an image with **Stable Diffusion XL (SDXL)** using the Hugging Face **Diffusers** library and **PyTorch**. The notebook exposes the main generation inputs—prompt, negative prompt, inference steps, and guidance scale—while selecting CUDA when available and falling back to CPU otherwise.
 
-### Workflow
+The original notebook remains the source of truth for the runnable implementation. The model architecture, inference logic, model configuration, and notebook behavior have not been rewritten as part of this presentation layer.
+
+## Why this project
+
+- Demonstrates practical integration of a modern text-to-image diffusion model.
+- Provides an inspectable, notebook-first workflow for experimentation.
+- Shows how prompts and generation parameters affect image synthesis.
+- Uses standard tools from the Python and generative-AI ecosystem.
+
+## Workflow
 
 ```text
-Text prompt + optional negative prompt
-              │
-              ▼
-   SDXL pipeline loaded with Diffusers
-              │
-              ▼
-     GPU acceleration when available
-              │
-              ▼
-          Generated image
+Prompt + optional negative prompt
+                │
+                ▼
+      SDXL pipeline via Diffusers
+                │
+                ▼
+      PyTorch inference on CUDA/CPU
+                │
+                ▼
+          Generated image output
 ```
+
+## Technology stack
+
+| Category | Technology | Role |
+| --- | --- | --- |
+| Language | Python | Runtime and notebook code |
+| Interface | Jupyter Notebook / JupyterLab | Interactive execution environment |
+| Generative model | Stable Diffusion XL 1.0 | Text-to-image synthesis |
+| Inference | Hugging Face Diffusers | SDXL pipeline integration |
+| Compute | PyTorch | Tensor computation and device acceleration |
+| Tracking | Weights & Biases | Optional experiment configuration/tracking |
 
 ## Features
 
 - Text-conditioned image generation with `StableDiffusionXLPipeline`.
-- Automatic CUDA detection with CPU fallback in the notebook workflow.
-- Configurable positive and negative prompts.
+- Positive and negative prompt configuration.
 - Configurable inference steps and guidance scale.
-- Optional SDXL base/refiner components exposed by the notebook.
-- Optional experiment configuration and tracking through Weights & Biases.
-- Jupyter-first workflow that is easy to inspect, modify, and extend.
-
-## Technology stack
-
-| Area | Technology |
-| --- | --- |
-| Language | Python |
-| Interface | Jupyter Notebook |
-| Generative model | Stable Diffusion XL 1.0 |
-| Inference | Hugging Face Diffusers and PyTorch |
-| Model formats | Hugging Face model checkpoints / SafeTensors-compatible dependencies |
-| Experiment tracking | Weights & Biases (`wandb`) |
+- CUDA detection with CPU fallback in the notebook workflow.
+- SDXL base and refiner model identifiers referenced by the notebook.
+- Optional Weights & Biases integration.
+- A transparent Jupyter workflow that can be read and modified cell by cell.
 
 ## Repository structure
 
 ```text
 text-to-image-sdxl/
-├── text_to_image.ipynb   # Original SDXL inference notebook
-├── models/               # Local model assets, when used; do not commit large weights
-├── README.md             # Project documentation
-├── requirements.txt      # Python dependencies for the notebook
+├── text_to_image.ipynb   # SDXL inference notebook and executable workflow
+├── models/               # Local model assets when used; large weights are ignored
+├── README.md             # Project documentation and setup guide
+├── requirements.txt      # Notebook and inference dependencies
 └── .gitignore            # Python, Jupyter, ML artifact, and secret exclusions
 ```
 
-The notebook remains the source of truth for the runnable implementation. No source-code rewrite or notebook conversion is required.
-
 ## Setup
 
-### Requirements
+### Prerequisites
 
 - Python 3.9 or newer
 - Jupyter Notebook or JupyterLab
 - A CUDA-capable GPU is strongly recommended for practical SDXL inference
-- Sufficient disk space and memory for the selected SDXL checkpoints
+- Enough memory and disk space for the selected SDXL checkpoints
 - Access to the Hugging Face model repositories used by the notebook
-- A Weights & Biases account only if experiment tracking is enabled
+- A Weights & Biases account only when optional tracking is enabled
 
 ### Installation
 
@@ -80,9 +95,12 @@ git clone https://github.com/Awaisiqbal-Code/text-to-image-sdxl.git
 cd text-to-image-sdxl
 
 python -m venv .venv
+
 # macOS/Linux
 source .venv/bin/activate
-# Windows PowerShell: .venv\\Scripts\\Activate.ps1
+
+# Windows PowerShell
+# .venv\Scripts\Activate.ps1
 
 python -m pip install --upgrade pip
 pip install -r requirements.txt
@@ -91,64 +109,79 @@ jupyter lab
 
 Open `text_to_image.ipynb` in Jupyter and run the cells from top to bottom.
 
+> **PyTorch note:** The unpinned `torch` entry allows installation of a build appropriate for the local hardware. For CUDA acceleration, follow the official [PyTorch installation selector](https://pytorch.org/get-started/locally/) if the default package is not suitable for your CUDA environment.
+
 ## Usage
 
-The notebook uses the SDXL base model identifier:
+The notebook references these SDXL model identifiers:
 
 ```text
 stabilityai/stable-diffusion-xl-base-1.0
-```
-
-The SDXL refiner identifier is also referenced by the notebook workflow:
-
-```text
 stabilityai/stable-diffusion-xl-refiner-1.0
 ```
 
-The notebook selects CUDA when available and otherwise falls back to CPU. Edit the prompt, negative prompt, and generation configuration in the notebook before running inference.
+To generate an image:
+
+1. Start JupyterLab using the command above.
+2. Open `text_to_image.ipynb`.
+3. Review or edit the prompt, negative prompt, and generation configuration.
+4. Run the notebook cells in order.
+5. Inspect the generated image output produced by the pipeline.
 
 ### Example prompts
 
-Use prompts appropriate to your own experiment, for example:
+Copy and adapt any of the following prompts:
 
-- `A cinematic photograph of a mountain cabin at sunrise, detailed natural lighting`
-- `A futuristic research laboratory in a dense rainforest, architectural photography`
-- `A watercolor illustration of a quiet coastal village, soft morning light`
+```text
+A cinematic photograph of a mountain cabin at sunrise, detailed natural lighting
+```
 
-The notebook also contains its original demonstration prompt and generation configuration. Those values have intentionally not been duplicated here so the notebook remains the authoritative executable example.
+```text
+A futuristic research laboratory in a dense rainforest, architectural photography
+```
+
+```text
+A watercolor illustration of a quiet coastal village, soft morning light
+```
+
+The notebook also contains its original demonstration prompt and configuration; the notebook remains the authoritative executable example.
 
 ### Input and output
 
-- **Input:** text prompt, optional negative prompt, and generation parameters.
-- **Processing:** SDXL text-to-image inference through Diffusers and PyTorch.
-- **Output:** one or more generated images returned by the pipeline and displayed or saved according to the notebook cells.
+| Stage | Description |
+| --- | --- |
+| Input | A text prompt, optional negative prompt, and generation parameters |
+| Processing | SDXL inference through Diffusers and PyTorch |
+| Output | Generated image output displayed or saved according to the notebook workflow |
 
 ## Demo
 
-No generated image assets are included in the repository at the time of this documentation update. To add a portfolio-ready demo:
+No generated image assets are currently included in the repository, so no fabricated gallery is shown here.
 
-1. Generate a few representative outputs with the notebook.
-2. Save them under a directory such as `assets/demo/`.
-3. Add captions and Markdown image links here.
-4. Confirm that the files are safe to publish and do not contain private prompts or data.
+To add a portfolio-ready demo later:
 
-## Model limitations and responsible use
+1. Run the notebook and generate representative outputs.
+2. Save approved images under a directory such as `assets/demo/`.
+3. Add Markdown image links and short captions to this section.
+4. Check that prompts, outputs, and any embedded metadata are safe to publish.
 
-- SDXL output quality and speed depend heavily on available GPU memory, inference settings, and prompt wording.
-- CPU execution may be impractical for interactive use.
-- Generated images can contain artifacts, inaccurate text, anatomical errors, or biased representations.
-- Outputs should be reviewed before publication or downstream use.
-- Model and generated-content usage must follow the applicable model, dataset, and platform licenses.
+## Limitations and responsible use
+
+- Output quality and generation speed depend on hardware, memory, prompts, and inference settings.
+- CPU execution may be impractical for interactive SDXL use.
+- Generated images may contain visual artifacts, inaccurate text, anatomical errors, or biased representations.
+- Review outputs before publication or downstream use.
+- Follow the applicable model, dataset, software, and platform licenses.
 
 ## Future improvements
 
-Potential extensions, without changing the current notebook behavior, include:
+Possible presentation or experimentation extensions include:
 
-- Add a small, documented demo-output gallery.
-- Expose generation settings through a lightweight UI or configuration file.
+- Add a documented gallery of repository-hosted demo outputs.
 - Add reproducible seeds and output metadata.
-- Add notebook validation or a smoke-test workflow for the documented environment.
 - Document GPU-memory guidance for common hardware configurations.
+- Add notebook validation or an environment smoke test.
+- Provide a lightweight interface without changing the current notebook workflow.
 
 ## Credits and acknowledgements
 
@@ -159,10 +192,10 @@ Potential extensions, without changing the current notebook behavior, include:
 
 ## License
 
-No license file was present or added because the repository does not currently provide an explicit license for this project. Add a license only after confirming that the project author has the right to do so and selecting terms that cover both the project code and the applicable model usage.
+No license file is currently included. Licensing should be added only after confirming the author’s rights and selecting terms that appropriately cover the project code and applicable model usage.
 
 ## Author
 
 Developed by [Awaisiqbal-Code](https://github.com/Awaisiqbal-Code).
 
-If this project is useful, consider starring the repository and opening an issue with reproducibility notes or improvement ideas.
+For reproducibility questions or documentation improvements, open an issue in the repository with the relevant environment details and notebook cell context.
