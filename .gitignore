@@ -1,0 +1,61 @@
+# Byte-compiled / optimized Python files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+env.bak/
+
+# Jupyter
+.ipynb_checkpoints/
+*.nbconvert.ipynb
+
+# Python tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs and local experiment output
+*.log
+wandb/
+runs/
+mlruns/
+outputs/
+output/
+
+# Large model and dataset artifacts
+models/*.safetensors
+models/*.ckpt
+models/*.bin
+models/*.pt
+models/*.pth
+*.safetensors
+*.ckpt
+*.onnx
+*.bin
+*.pt
+*.pth
+
+# Local caches and downloaded datasets
+.cache/
+.huggingface/
+transformers_cache/
+datasets/

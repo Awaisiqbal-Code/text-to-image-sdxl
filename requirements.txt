@@ -1,0 +1,17 @@
+# Core runtime
+accelerate
+# PyTorch: install the CUDA-compatible build for your hardware when needed.
+torch
+
+# Diffusion pipeline and model configuration
+diffusers
+transformers
+safetensors
+
+# Optional experiment tracking used by the notebook
+wandb
+
+# Notebook runtime
+jupyterlab
+notebook
+ipykernel
