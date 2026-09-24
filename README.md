@@ -156,14 +156,21 @@ The notebook also contains its original demonstration prompt and configuration; 
 
 ## Demo
 
-No generated image assets are currently included in the repository, so no fabricated gallery is shown here.
+The following are actual outputs generated with this project's SDXL workflow and stored in the repository's `examples/` directory.
 
-To add a portfolio-ready demo later:
+### Mountain Village
 
-1. Run the notebook and generate representative outputs.
-2. Save approved images under a directory such as `assets/demo/`.
-3. Add Markdown image links and short captions to this section.
-4. Check that prompts, outputs, and any embedded metadata are safe to publish.
+![Mountain Village](examples/output-01.png)
+
+**Prompt:**  
+`A beautiful Pakistani mountain village surrounded by snow-covered mountains, cinematic photography, highly detailed`
+
+### Futuristic City
+
+![Futuristic City](examples/output-02.png)
+
+**Prompt:**  
+`A futuristic city at night, neon lights, flying cars, cinematic atmosphere, highly detailed, realistic, 4K, professional photography`
 
 ## Limitations and responsible use
 
